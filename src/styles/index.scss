@@ -1,0 +1,255 @@
+body {
+  margin: 0;
+}
+
+* {
+  font-family: 'Lato', system-ui, Tahoma, sans-serif;
+  color: #fafafa;
+  box-sizing: border-box;
+}
+
+.header {
+  background: #fafafa;
+  height: 60px;
+  width: 100%;
+  padding: 0 80px;
+  -webkit-box-shadow: 0px -4px 5px -5px rgba(91, 108, 122, 0.6) inset;
+  -moz-box-shadow: 0px -4px 5px -5px rgba(91, 108, 122, 0.6) inset;
+  box-shadow: 0px -4px 5px -5px rgba(91, 108, 122, 0.6) inset;
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    width: 60vw;
+    min-width: 800px;
+    max-width: 1300px;
+  }
+  &__title {
+    color: #1F1F1F;
+    padding-top: 15px;
+  }
+
+  > div input {
+   
+    height: 36px;
+    font-size: 16px;
+    border-style: none;
+    background: #eceef2;
+    margin: auto 0;
+    border-radius: 4px;
+    padding: 4px 20px;
+    outline:none;
+    color: #1F1F1F;
+    &:active {
+      border: none;
+    }
+    &:hover {
+      border: none;
+    }
+  }
+
+  > div button {
+    background: transparent;
+    color: #1F1F1F;
+    height: 22px;
+    border-style: none;
+    border-radius: 4px;
+    height: 36px;
+  }
+
+  > div {
+    margin: 0 auto;
+  }
+
+
+}
+.location {
+  background: transparent;
+    border-style: none;
+
+    margin-left: auto;
+}
+.input {
+  padding-top: 12px;
+}
+.wrap {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background: #eceef2;
+}
+
+.content {
+  max-width: 1900px;
+  margin: 20px auto;
+  padding: 0 40px;
+
+}
+
+%container {
+  border: 1px solid #ccc;
+  width: 60vw;
+  min-width: 800px;
+  max-width: 1300px;
+  background: #7bc8d7;
+  padding: 40px;
+  border-radius: 5px;
+  box-shadow: 0px 1px 10px 2px rgba(34, 60, 80, 0.2);
+  border-style: none;
+  color: #333;
+  border-radius: 12px;
+
+}
+
+
+
+%flexBox {
+  display: flex;
+  justify-content: space-between;
+}
+
+.current {
+  @extend %container;
+  position: relative;
+  z-index: 1;
+
+  &__head {
+    display: flex;
+  }
+
+  &__date {
+    margin: 34px 0 0 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 100px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  &__day,
+  &__mounth,
+  &__time {
+    color: #fafafa;
+    opacity: 0.7;
+  }
+
+  &__wheather {
+    display: flex;
+  }
+
+  &__temp {
+    font-size: 60px;
+
+    &:after {
+      content: '\00B0';
+      font-weight: 500;
+    }
+  }
+
+  &__other {
+
+    font-size: 14px;
+    opacity: 0.7;
+    display: flex;
+    margin: auto 0;
+  }
+
+  &__mainInfo {
+    color: #fafafa;
+  }
+
+  &__city {
+
+    font-size: 60px;
+    margin: 0 0 10px 0;
+  }
+
+  &__background {
+    z-index: -1;
+    position: absolute;
+    border-radius: 12px;
+    opacity: 0.3;
+    top: 0px;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+  }
+}
+@media screen and(min-width: 450px)  {
+
+  %container {
+    width: 96vw;
+  }
+  .header {
+    padding: 0 40px;
+    &__content {
+      width: 100%;
+    }
+  }
+  .content {
+    padding: 0;
+  }
+}
+.hourly {
+
+  @extend %flexBox;
+  border-top: 1px solid #fafafa;
+  padding: 20px 0 0 0;
+}
+
+.item {
+  display: grid;
+
+  >div {
+    margin: 0 auto;
+    color: #fafafa;
+  }
+
+  >img {
+    margin: 0 auto;
+  }
+}
+
+.daily {
+  @extend %container;
+  margin-top: 30px;
+}
+
+.daily {
+  @extend %flexBox;
+
+}
+
+.day {
+  font-size: calc(14px + 0.4vw);
+  font-weight: bold;
+  opacity: 0.7;
+}
+
+.temp {
+  font-size: calc(14px + 0.7vw);
+  font-weight: bold;
+
+  &:after {
+    content: '\00B0';
+    font-weight: 500;
+  }
+
+}
+
+.icon {
+  height: 60px;
+}
+
+.bckDark {
+  background-image: url('https://images.unsplash.com/photo-1558975934-3852951edd25?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2855&q=80');
+}
+
+.bckCloudy {
+  background-image: url('https://images-na.ssl-images-amazon.com/images/I/51y6dy0T8sL._AC_SL1000_.jpg');
+  background-size: 100%;
+}
+
+.bckClear {
+  background-image: url('https://dnepr.info/wp-content/uploads/2021/03/nebo-oblaka-iasnaia-pogoda-solntse-priroda.jpg)');
+}
