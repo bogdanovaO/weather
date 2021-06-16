@@ -1,3 +1,5 @@
+@import "_animation.scss";
+
 body {
   margin: 0;
 }
@@ -10,22 +12,24 @@ body {
 
 .header {
   background: #fafafa;
-  height: 60px;
+  padding: 1.5vh;
   width: 100%;
-  padding: 0 80px;
+  // padding: 0 80px;
   -webkit-box-shadow: 0px -4px 5px -5px rgba(91, 108, 122, 0.6) inset;
   -moz-box-shadow: 0px -4px 5px -5px rgba(91, 108, 122, 0.6) inset;
   box-shadow: 0px -4px 5px -5px rgba(91, 108, 122, 0.6) inset;
   &__content {
+    height: 5vh;
     display: flex;
     justify-content: space-between;
     width: 60vw;
-    min-width: 800px;
+    // min-width: 800px;
     max-width: 1300px;
   }
   &__title {
+    line-height: 6vh;
     color: #1F1F1F;
-    padding-top: 15px;
+    // padding-top: 15px;
   }
 
   > div input {
@@ -69,18 +73,19 @@ body {
     margin-left: auto;
 }
 .input {
-  padding-top: 12px;
+  // padding-top: 12px;
+  position: relative;
 }
 .wrap {
-  display: flex;
+  display: none;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 8vh);
   background: #eceef2;
 }
 
 .content {
   max-width: 1900px;
-  margin: 20px auto;
+  margin: auto;
   padding: 0 40px;
 
 }
@@ -88,9 +93,9 @@ body {
 %container {
   border: 1px solid #ccc;
   width: 60vw;
-  min-width: 800px;
+  // min-width: 800px;
   max-width: 1300px;
-  background: #7bc8d7;
+  background:  none;
   padding: 40px;
   border-radius: 5px;
   box-shadow: 0px 1px 10px 2px rgba(34, 60, 80, 0.2);
@@ -100,7 +105,20 @@ body {
 
 }
 
-
+.showHourly,  .showDaily {
+  background: none;
+  border-bottom: 0!important;
+  font-size: 20px;
+}
+.showHourly  {
+  border: 1px solid #fff;
+}
+.showDaily  {
+  border: none;
+}
+.menuButtons {
+  display: flex;
+}
 
 %flexBox {
   display: flex;
@@ -175,23 +193,111 @@ body {
     background: #000;
   }
 }
-@media screen and(min-width: 450px)  {
 
-  %container {
-    width: 96vw;
-  }
-  .header {
-    padding: 0 40px;
-    &__content {
-      width: 100%;
-    }
-  }
+.searchIcon {
+  height: 20px;
+  position: absolute;
+  top: 6px;
+  right: 12px;
+  opacity: 0.5;
+}
+@media screen and (max-width : 900px) {
+
   .content {
+    margin: 60px 0 0 0 ;
     padding: 0;
   }
+  .current {
+    width: 100vw;
+    border-radius: 0;
+  }
+  .current__background {
+    border-radius: 0;
+  } 
+  .header__content {
+    width: 100%;
+    padding: 0 10px;
+  }
+  .hourly, .daily {
+    flex-wrap: wrap;
+  }
 }
-.hourly {
+@media screen and (min-width : 900px) and (max-width : 1400px) {
+  .content {
+    // margin: 10% auto;
+    padding: 0;
+  }
+  .current {
+    width: 90vw;
+  }
+  .header__content {
+    width:  90vw;
+  }
+  
+}
+@media screen and (min-width : 300px) and (max-width : 487px) {
+  .content {
+    margin: 0 ;
+    padding: 0;
+  }
+  .header__title {
+    font-size: 12px;
+    // line-height: 6vh;
+  }
+  .cityInput {
+    height: 32px;
+  }
+  .header__content {
+    margin: 0!important;
+  }
+  .current {
+    height: 100%;
+    padding: 10px;
+  }
+  .current__date {
+    margin: 15px 0 0 20px;
 
+  }
+
+}
+@media screen and (min-width : 319px) and (max-width : 470px) {
+  .current__icon {
+    height: 35px;
+  }
+  .current__other {
+    display: none;
+  }
+  .location {
+    display: none;
+  }
+  .current__city, .current__temp {
+    font-size: 30px
+
+  }
+
+  // .content {
+  //   margin: 0;
+  //   padding: 0;
+  // }
+
+}
+// @media screen and (max-width: 450px)  {
+//   %container {
+//     width: 85vw;
+//   }
+//   .header {
+//     &__content {
+//       width: 85vw;
+//     }
+//   }
+//   .content {
+//     margin: 0;
+//     padding: 0;
+//   }
+// }
+
+
+.hourly {
   @extend %flexBox;
   border-top: 1px solid #fafafa;
   padding: 20px 0 0 0;
@@ -202,6 +308,7 @@ body {
 
   >div {
     margin: 0 auto;
+    height: 20px;
     color: #fafafa;
   }
 
@@ -210,15 +317,18 @@ body {
   }
 }
 
-.daily {
-  @extend %container;
-  margin-top: 30px;
-}
 
 .daily {
   @extend %flexBox;
-
+  border-top: 1px solid #fafafa;
+  padding: 20px 0 0 0;
+  display: none;
 }
+
+// .daily {
+//   @extend %flexBox;
+
+// }
 
 .day {
   font-size: calc(14px + 0.4vw);
@@ -242,14 +352,16 @@ body {
 }
 
 .bckDark {
-  background-image: url('https://images.unsplash.com/photo-1558975934-3852951edd25?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2855&q=80');
+  background-image: url('https://sr.gallerix.ru/M/1809742601/944233120.jpg');
+  background-size: cover;
 }
 
 .bckCloudy {
-  background-image: url('https://images-na.ssl-images-amazon.com/images/I/51y6dy0T8sL._AC_SL1000_.jpg');
-  background-size: 100%;
+  background-image: url('https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/pdvangogh-dt1567.jpg?w=1300&dpr=1&fit=default&crop=default&q=80&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=828e8853c4c09cec5a983a8b62837510');
+  background-size: cover;
 }
 
 .bckClear {
-  background-image: url('https://dnepr.info/wp-content/uploads/2021/03/nebo-oblaka-iasnaia-pogoda-solntse-priroda.jpg)');
+  background-image: url('https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/pdvangogh-pd47-1002.jpg?w=1300&dpr=1&fit=default&crop=default&q=80&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=d23813ff196554d457035b92d2f66dbe');
+  background-size: cover;
 }

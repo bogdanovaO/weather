@@ -2,11 +2,12 @@
 <html lang="en">
 
 <head >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>t</title>
 </head>
 
 <body>
+
   <header class="header">
     <div class="header__content">
 
@@ -17,11 +18,12 @@
 
       <div class="input">
 
-          <input class="cityInput">
+          <input class="cityInput" placeholder="поиск">
 
-     
-
-      <button class="changeCityBtn">поиск</button>
+        
+          <img class="searchIcon" alt="search-icon" src="https://simpleicon.com/wp-content/uploads/magnifier-2.png">
+      <!-- <button class="changeCityBtn"></button> -->
+      
       
       </div>
     </div>
@@ -29,6 +31,18 @@
 
 
   </header>
+
+
+  <div id="load" class="loading">
+    <div>G</div>
+    <div>N</div>
+    <div>I</div>
+    <div>D</div>
+    <div>A</div>
+    <div>O</div>
+    <div>L</div>
+  </div>
+
   <div class="wrap">
     <div class="content">
 
@@ -43,32 +57,35 @@
             <div class="current__time"></div>
           </div>
          
-          <button class="location">определить местоположение
+          <!-- <button class="location">
+            <img alt="location" src="https://www.iconsdb.com/icons/preview/white/location-xxl.png">
 
-          </button>
+          </button> -->
         </div>
 
             <div class="current__wheather">
               <div class="current__temp"></div>
 
-              <img src="/" class="current__icon">
+              <img src="/" alt=""  class="current__icon">
               <div class="current__other">
                 <div class="current__mainInfo"></div>
-
-
               </div>
 
             </div>
-
+            <div class="menuButtons">
+              <button class="showHourly">по часам</button>
+              <button class="showDaily">на неделю</button>
+            </div>
             <div class="hourly">
+            </div>
+            <div class="daily">
 
             </div>
-    
       </div>
 
-      <div class="daily">
+      <!-- <div class="daily">
 
-      </div>
+      </div> -->
 
     </div>
   </div>

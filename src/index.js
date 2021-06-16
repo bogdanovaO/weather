@@ -1,61 +1,62 @@
 'use strict'
 import "./styles/index.scss";
 
-let  town = ''
+let  currentPlace = '';
+let bck = '';
+
+
+function loadingPage() {
+  document.querySelector('.loading').style.display = "none";
+  document.querySelector('.wrap').style.display = "flex";
+
+}
+
+
  function getLocation() {
    if (navigator.geolocation) {
    navigator.geolocation.getCurrentPosition(position => {
-    let coords = position.coords.latitude + '.' + position.coords.longitude;
-    const currentCity = getCityName(coords)
-    getApiData(currentCity); 
+    let lat = position.coords.latitude;
+    let lon = position.coords.longitude;
+    fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=ru`)
+
+    .then(function (response) {
+      if (response.status !== 200) {
+        alert('err in getLocation')
+        return
+      };
+      response.json().then(function (data) {
+        currentPlace = data.city === ""  ?  data.countryName : data.city;
+        console.log(currentPlace);
+        getApiData()
+      });
+    })
  }, error => {
+  let result = prompt('Не удалось определить местоположение, укажите:' );
+  currentPlace = result;
+  getApiData()
    console.error(error)
  })
 }
  }
-document.addEventListener("DOMContentLoaded", getLocation)
-
-function getCityName(coords) {
-fetch(`https://geolocation-db.com/json/${coords}`)
-.then(function (response) {
-  if (response.status !== 200) {
-    alert('err')
-    return
-  };
-  response.json().then(function (data) {
-    console.log(data.city)
-  });
-})
 
 
-let city = 'moscow'
-let bck = ''
-
-document.querySelector('.location').onclick = function() {
-  getLocation()
-}
-
-function changeCity() {
+ function changeCity() {
   let value = document.querySelector('.cityInput').value;
-  city = value;
-  getApiData(city);
+  currentPlace = value;
+  getApiData(currentPlace);
 }
 
-
-document.querySelector('.changeCityBtn').onclick = function() {
-  changeCity()
-}
 
 function getApiData() {
   let currentWether = []
   let lon = ''
   let lat = ''
 
-fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric,{state%20code}&appid=7a272ee75ecd163ddfed4a4a57d3e611&lang=ru`)
+fetch(`https://api.openweathermap.org/data/2.5/weather?q=${currentPlace}&units=metric,{state%20code}&appid=7a272ee75ecd163ddfed4a4a57d3e611&lang=ru`)
 
 .then(function (response) {
   if (response.status !== 200) {
-    alert('err')
+    alert('err in getApiData')
     return
   };
   response.json().then(function (data) {
@@ -65,6 +66,7 @@ fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric,{st
     bck = currentWether.weather[0].description
     setBckground(bck)
     renderCurrentWether(currentWether)
+    loadingPage()
 
 fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${Number(lat)}&lon=${Number(lon)}&exclude=hourly&appid=7a272ee75ecd163ddfed4a4a57d3e611&lang=ru`)
 
@@ -74,12 +76,13 @@ fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${Number(lat)}&lon=${
     for (let i=0; i<8; i++) {
       let customObject = {
         ["day"]: getDay(data.daily[i].dt),
-        ["icon"]: `http://openweathermap.org/img/wn/${data.daily[i].weather[0].icon}@2x.png`,
-        ["temp"]: data.daily[i].temp.day
+        ["icon"]: `https://openweathermap.org/img/wn/${data.daily[i].weather[0].icon}@2x.png`,
+        ["temp"]: data.daily[i].temp.day,
+        ["mounth"]: getMounth(data.daily[i].dt)
       }
       daily.push(customObject)
     }
-    renderDailyInfo(daily)
+    renderDailyInfo(daily);
   })
 })
 
@@ -92,7 +95,7 @@ fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${Number(lat)}&lon=${
       let customObject = {
         ["day"]: getHour(data.hourly[i].dt),
         // ["mainInfo"]: data.hourly[i].weather[0].description,
-        ["icon"]: `http://openweathermap.org/img/wn/${data.hourly[i].weather[0].icon}@2x.png`,
+        ["icon"]: `https://openweathermap.org/img/wn/${data.hourly[i].weather[0].icon}@2x.png`,
         ["temp"]: data.hourly[i].temp
       }
       hourly.push(customObject)
@@ -100,7 +103,6 @@ fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${Number(lat)}&lon=${
     renderHourlyInfo(hourly)
   })
 })
-
 .catch(function(err) {  
     console.log('Fetch Error :-S', err);  
   });
@@ -108,36 +110,29 @@ fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${Number(lat)}&lon=${
 })
 }
 
+document.querySelector('.showHourly').onclick = function() {
+  document.querySelector('.daily').style.display = "none";
+  document.querySelector('.hourly').style.display = "flex";
+  document.querySelector('.showHourly').style.border = "1px solid";
+  document.querySelector('.showDaily').style.border = "inherit";
+}
+document.querySelector('.showDaily').onclick = function() {
+  document.querySelector('.daily').style.display = "flex";
+  document.querySelector('.hourly').style.display = "none";
+  document.querySelector('.showDaily').style.border = "1px solid";
+  document.querySelector('.showHourly').style.border = "inherit";
+}
 
+getLocation()
 
-function renderCurrentWether(currentWether) {
-  document.querySelector('.current__city').textContent = currentWether.name;
-  document.querySelector('.current__day').textContent = getDay(currentWether.dt) + ' ' + getMounth(currentWether.dt) + ' ' + getHour(currentWether.dt) +':00';
-  document.querySelector('.current__temp').textContent = Math.round(currentWether.main.temp -273.15 );
-  document.querySelector('.current__mainInfo').textContent = currentWether.weather[0].description + ', ' + 'ощущается: '+ Math.round(currentWether.main.feels_like -273.15) + ', '+ 'скорость ветра: '+ currentWether.wind.speed + ' м/с';
-  
-  const element = document.createElement('div');
-  element.innerHTML = `
-  <img class="current__icon" src=${`http://openweathermap.org/img/wn/${currentWether.weather[0].icon}@2x.png`}>
-  `;
-  document.querySelector(".current__icon").replaceWith(element);
-  console.log(element)
-};
-
-
-
-function setBckground(data) {
-  if (data === 'пасмурно') {
-   document.getElementById("current").className = "current bckDark"
-  } else if (data === 'небольшая облачность' || 'облачно с прояснениями' || 'переменная облачность') {
-    document.getElementById("current").className = "current bckCloudy"
-  } else if (data === 'ясно'){
-    document.getElementById("current").className =  "current bckClear"
-  } else {
-    document.getElementById("current").className =  "current"
+document.querySelector('.cityInput').onkeydown = function(event) {
+  if (event.keyCode == 13) {
+    changeCity();
   }
 }
-getApiData()
+document.querySelector('.searchIcon').onclick = function() {
+  changeCity()
+}
 
 
 function getHour(timestamp) {
@@ -157,9 +152,12 @@ function getMounth(timestamp) {
   return mounth
 }
 
+
   class CreateItem {
-    constructor(day, temp, icon, parentSelector, ...classes) {
+    constructor(day, mounth, temp, icon, parentSelector, ...classes) {
       this.day = day;
+      this.mounth = mounth;
+      console.log(mounth)
       this.temp = Math.round(temp -273.15 );
       this.icon = icon;
       this.classes = classes;
@@ -169,34 +167,65 @@ function getMounth(timestamp) {
       const element = document.createElement('div');
       this.classes.forEach(className => element.classList.add(className));
         element.innerHTML = `
+       ${ this.mounth ===  null ? 
+        // ``
+        `<div></div>`
+        : `<div>${this.mounth}</div>`} 
         <div  class="day">${this.day}</div>
         <img class="icon" src=${this.icon}>
         <div class="temp">${this.temp}</div>
         `
         this.parent.append(element);
-
     }
-
   }
 
+//рендер общей информации
+  function renderCurrentWether(currentWether) {
+    document.querySelector('.current__city').textContent = currentWether.name;
+    document.querySelector('.current__day').textContent = getDay(currentWether.dt) + ' ' + getMounth(currentWether.dt) + ' ' + getHour(currentWether.dt) +':00';
+    document.querySelector('.current__temp').textContent = Math.round(currentWether.main.temp -273.15 );
+    document.querySelector('.current__mainInfo').textContent = currentWether.weather[0].description + ', ' + 'ощущается: '+ Math.round(currentWether.main.feels_like -273.15) + ', '+ 'скорость ветра: '+ currentWether.wind.speed + ' м/с';
+    
+    const element = document.createElement('div');
+    element.innerHTML = `
+    <img class="current__icon" src=${`http://openweathermap.org/img/wn/${currentWether.weather[0].icon}@2x.png`}>
+    `;
+    document.querySelector(".current__icon").replaceWith(element);
+    console.log(element)
+  };
   
+//рендер на 7 дней вперед
 function renderDailyInfo(daily) {
   let element = document.querySelector(".daily");
 while (element.firstChild) {
   element.removeChild(element.firstChild);
 }
   for (let i=0; i<daily.length; i++) {
-    new CreateItem(daily[i].day,daily[i].temp, daily[i].icon, ".daily", "item").render();
-
+    new CreateItem(daily[i].day, daily[i].mounth,  daily[i].temp, daily[i].icon, ".daily", "item").render();
   }
 }
+//рендер по часам
 function renderHourlyInfo(hourly) {
   let element = document.querySelector(".hourly");
   while (element.firstChild) {
     element.removeChild(element.firstChild);
   }
   for (let i=0; i<hourly.length; i++)  {
-    new CreateItem(hourly[i].day,  hourly[i].temp, hourly[i].icon, ".hourly", "item").render();
+    new CreateItem(hourly[i].day, null, hourly[i].temp, hourly[i].icon, ".hourly", "item").render();
   }
 }
+
+
+function setBckground(data) {
+  if (data === 'пасмурно') {
+   document.querySelector(".wrap").className = "wrap bckDark"
+  } else if (data === 'ясно')  {
+    document.querySelector(".wrap").className =  "wrap bckClear";
+  } else if (data === 'небольшая облачность' || 'облачно с прояснениями' || 'переменная облачность') {
+    document.querySelector(".wrap").className = "wrap bckCloudy";
+  } else {
+    document.querySelector(".wrap").className =  "wrap"
+  }
 }
+
+
