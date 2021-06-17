@@ -26,7 +26,6 @@ function loadingPage() {
       };
       response.json().then(function (data) {
         currentPlace = data.city === ""  ?  data.countryName : data.city;
-        console.log(currentPlace);
         getApiData()
       });
     })
@@ -157,7 +156,6 @@ function getMounth(timestamp) {
     constructor(day, mounth, temp, icon, parentSelector, ...classes) {
       this.day = day;
       this.mounth = mounth;
-      console.log(mounth)
       this.temp = Math.round(temp -273.15 );
       this.icon = icon;
       this.classes = classes;
@@ -191,7 +189,6 @@ function getMounth(timestamp) {
     <img class="current__icon" src=${`http://openweathermap.org/img/wn/${currentWether.weather[0].icon}@2x.png`}>
     `;
     document.querySelector(".current__icon").replaceWith(element);
-    console.log(element)
   };
   
 //рендер на 7 дней вперед
