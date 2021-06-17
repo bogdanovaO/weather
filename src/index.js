@@ -146,7 +146,7 @@ function getDay(timestamp) {
   return day
 }
 function getMounth(timestamp) {
-  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var months = ['Янв','Фев','Мар','Апр','Мая','Июня','Июля','Авг','Сен','Окт','Ноя','Дек'];
   let i = new Date(timestamp * 1000);
   let mounth = months[i.getMonth()];
   return mounth
